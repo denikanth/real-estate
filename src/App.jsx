@@ -7,8 +7,9 @@ const App = () => {
   return (
     <div className='w-[100vw] h-[100vh]'>
       <div className='text-red-700 text-[40px] text-center'>
-        giihn
+        App
       </div>
+       
     </div>
   )
 }
