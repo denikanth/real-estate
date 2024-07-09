@@ -18,5 +18,5 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const User = new mongoose.model('User', userSchema)//i created a model or collection called User using that userSchema 
-//note that mongoDb automatically add s after User
+//note that mongoDb automatically add s after User collection if if we add more documents in it
 export default User
