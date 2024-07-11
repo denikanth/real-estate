@@ -57,7 +57,7 @@ const SignUp = () => {
 					<input onChange={handlechange} className='p-3 rounded-lg border bg-gray-300' type="password" placeholder='Password'
 						name='password' id='password' />
 					<button disabled={loading} className='bg-[#4285F4] text-white p-3 rounded-lg hover:opacity-95
-         			outline-none disabled:opacity-80' >{loading ? 'loading..' : 'SIGNUP'}</button>
+         			outline-none disabled:opacity-80' >{loading ? 'loading..' : 'SIGN UP'}</button>
 					<button className='bg-[#DB4437] text-white p-3 rounded-lg
         				 hover:opacity-95 disabled:opacity-95'>CONTINUE WITH GOOGLE</button>
 				</form>
