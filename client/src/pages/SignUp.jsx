@@ -5,7 +5,7 @@ const SignUp = () => {
 	const [formdata, setFormdata] = useState({})
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(null)
-	const nagigate=useNavigate()
+	const navigate=useNavigate()
 	const handlechange = (e) => {
 		setFormdata({
 			...formdata,
@@ -33,7 +33,7 @@ const SignUp = () => {
 			}
 			setLoading(false)
 			setError(null)
-			nagigate('/sign-in')
+			navigate('/sign-in')
 			
 
 		} catch (err) {
@@ -62,7 +62,7 @@ const SignUp = () => {
         				 hover:opacity-95 disabled:opacity-95'>CONTINUE WITH GOOGLE</button>
 				</form>
 			</div>
-			<p className='mt-1 text-[16px] font-normal'> Have an Account?
+			<p className='mt-1 text-[16px] font-semibold'> Have an Account?
 				<Link to='/sign-in'>
 					<span className='text-blue-600 cursor-pointer'> sign in</span>
 				</Link>

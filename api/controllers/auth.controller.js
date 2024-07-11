@@ -26,13 +26,13 @@ export const signin=async(req,res,next)=>{
     try{
       const validUser=await User.findOne({email})
       if(!validUser){
-        return next(401,'User not found')
+        return next(errorHandler( 401,'User not found'))//here i make a own err so i can call error middleware
       }
       const validPassword=bcryptjs.compareSync(password,validUser.password)
       
       
       if(!validPassword){
-        return next(401,'Invalid Password')
+        return next(errorHandler( 401,'Invalid password'))//here i make a own err so i can call error middleware ,errorHandler( 401,'Invalid password') this will return a err object
       }
       const {password:pass, ...rest}=validUser._doc
       const token=jwt.sign({id:validUser._id},process.env.JWT_SCRETE)
