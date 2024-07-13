@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link,useNavigate } from 'react-router-dom'
 import { useSelector,useDispatch } from 'react-redux'
 import {signinStart,signinSuccess,signFailure} from '../redux/user/userSlice.js'
+import Oauth from '../components/Oauth.jsx'
 const SignIn = () => {
   const [formdata, setFormdata] = useState({})
   const {loading,error}=useSelector((state)=>state.user)
@@ -56,8 +57,7 @@ const SignIn = () => {
             name='password' id='password' />
           <button disabled={loading} className='bg-[#4285F4] text-white p-3 rounded-lg hover:opacity-95
          			outline-none disabled:opacity-80' >{loading ? 'loading..' : 'SIGN IN'}</button>
-          <button className='bg-[#DB4437] text-white p-3 rounded-lg
-        				 hover:opacity-95 disabled:opacity-95'>CONTINUE WITH GOOGLE</button>
+          <Oauth/>
         </form>
       </div>
       <p className='mt-1 text-[16px] font-semibold'> Dont Have an Account?

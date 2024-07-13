@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link,useNavigate } from 'react-router-dom'
+import Oauth from '../components/Oauth'
 const SignUp = () => {
 
 	const [formdata, setFormdata] = useState({})
@@ -58,8 +59,7 @@ const SignUp = () => {
 						name='password' id='password' />
 					<button disabled={loading} className='bg-[#4285F4] text-white p-3 rounded-lg hover:opacity-95
          			outline-none disabled:opacity-80' >{loading ? 'loading..' : 'SIGN UP'}</button>
-					<button className='bg-[#DB4437] text-white p-3 rounded-lg
-        				 hover:opacity-95 disabled:opacity-95'>CONTINUE WITH GOOGLE</button>
+					<Oauth/>
 				</form>
 			</div>
 			<p className='mt-1 text-[16px] font-semibold'> Have an Account?
