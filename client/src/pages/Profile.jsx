@@ -11,8 +11,7 @@ const Profile = () => {
   const fileRef=useRef(null)
   const [fileUploadError,setFileUploadError]=useState(false)
   const [formdata,setFormData]=useState({})
-  console.log(filePercent)
-  console.log(formdata)
+ 
   useEffect(()=>{
     if(file){
       handleFileUpload(file)
