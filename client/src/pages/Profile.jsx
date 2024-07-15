@@ -38,11 +38,12 @@ const Profile = () => {
           //uploadTask.snapshot.ref will give the location of current uploaded image in firebase
           //getDownloadUrl will genrate url of that image location
           getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl)=>setFormData({...formdata,avatar:downloadUrl}))
-          console.log(uploadTask.snapshot.ref+ " this is download url")
+           
           setFileUploadError(false)
         }
       )
   }
+  console.log(currentUser.avatar)
   return (
 
     <div className='flex items-center justify-center flex-col
