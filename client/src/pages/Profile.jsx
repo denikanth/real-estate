@@ -3,7 +3,7 @@ import { useSelector,useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { getDownloadURL, getStorage,ref,uploadBytesResumable} from 'firebase/storage'
 import { app } from '../firebase'
-import {  updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice'
+import {  deleteUserFailure, deleteUserSuccess, updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice'
 const Profile = () => {
   const {loading,error,currentUser}=useSelector((state)=>state.user)
   
@@ -59,7 +59,25 @@ const Profile = () => {
       
 
     }
-    console.log(formdata)
+    const handleDelete=async()=>{
+
+      try {
+        const res=await fetch(`api/user/delete/${currentUser._id}`,{
+          method:'DELETE'
+        })
+
+        const data=await res.json()
+
+        if(data.success ===false){
+          dispatch(deleteUserFailure(data.message))
+          return
+        }
+        dispatch(deleteUserSuccess())
+      } catch (err) {
+        dispatch(deleteUserFailure(err.message))
+      }
+    }
+
     const handleFileUpload=async (file)=>{
       const storage=getStorage(app)//geting an access to storsge in firebase through my firebase configuratin which is initialized in app
       const fileName=new Date().getTime() +file.name
@@ -122,7 +140,7 @@ const Profile = () => {
         </form>
         <div className='flex justify-between mt-4'>
 
-          <p className='text-red-700 cursor-pointer'>Delete Account</p>
+          <p className='text-red-700 cursor-pointer' onClick={handleDelete}>Delete Account</p>
           <p className='text-red-700 cursor-pointer'>Sign out</p>
         </div>
       </div>
