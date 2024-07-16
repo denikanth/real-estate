@@ -27,6 +27,7 @@ export const updateUser = async (req, res, next) => {
         console.log(req.params.id)
         const {password,...rest}=updatedUser._doc
         res.status(200).json(rest)
+        console.log(rest)
     } catch (err) {
         next(err)
     }
