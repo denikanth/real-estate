@@ -3,7 +3,7 @@ import { useSelector,useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { getDownloadURL, getStorage,ref,uploadBytesResumable} from 'firebase/storage'
 import { app } from '../firebase'
-import {  deleteUserFailure, deleteUserSuccess, updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice'
+import {  deleteUserFailure, deleteUserSuccess, delteUserStart, signoutUserFailure, signoutUserSuccess, updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice'
 const Profile = () => {
   const {loading,error,currentUser}=useSelector((state)=>state.user)
   
@@ -60,7 +60,7 @@ const Profile = () => {
 
     }
     const handleDelete=async()=>{
-
+      dispatch(delteUserStart())
       try {
         const res=await fetch(`api/user/delete/${currentUser._id}`,{
           method:'DELETE'
@@ -77,6 +77,25 @@ const Profile = () => {
         dispatch(deleteUserFailure(err.message))
       }
     }
+
+    const handlesignout=async()=>{
+
+      try {
+        const res=await fetch('api/auth/signout')
+          
+
+        const data=await res.json()
+
+        if(data.success ===false){
+          dispatch(signoutUserFailure(data.message))
+          return
+        }
+        dispatch(signoutUserSuccess())
+      } catch (err) {
+        dispatch(signoutUserFailure(err.message))
+      }
+    }
+
 
     const handleFileUpload=async (file)=>{
       const storage=getStorage(app)//geting an access to storsge in firebase through my firebase configuratin which is initialized in app
@@ -141,7 +160,7 @@ const Profile = () => {
         <div className='flex justify-between mt-4'>
 
           <p className='text-red-700 cursor-pointer' onClick={handleDelete}>Delete Account</p>
-          <p className='text-red-700 cursor-pointer'>Sign out</p>
+          <p className='text-red-700 cursor-pointer' onClick={handlesignout}>Sign out</p>
         </div>
       </div>
       
