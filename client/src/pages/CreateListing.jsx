@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase'
-import {useSelector} from 'react-redux' 
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 const CreateListing = () => {
-	const navigate=useNavigate()
-	const {currentUser}=useSelector((state)=>state.user)
+	const navigate = useNavigate()
+	const { currentUser } = useSelector((state) => state.user)
 	const [files, setFiles] = useState([])
 	const [formdata, setFormdata] = useState({
 		name: '',
@@ -80,21 +80,21 @@ const CreateListing = () => {
 		})
 
 	}
-	const handleChange = (e) => {
+	const handleChange = (e) => {//here i managed to get differnt type of inputs and store in state variable
 		console.log(e.target.type)
-		if (e.target.id === 'sale' || e.target.id === 'rent') {
+		if (e.target.id === 'sale' || e.target.id === 'rent') {//checkbox input but i only had type property in state variable
 			setFormdata({
 				...formdata,
 				type: e.target.id
 			})
 		}
-		if (e.target.id === 'parking' || e.target.id === 'furnished' || e.target.id === 'offer') {
+		if (e.target.id === 'parking' || e.target.id === 'furnished' || e.target.id === 'offer') { // i managed booleans
 			setFormdata({
 				...formdata,
 				[e.target.id]: e.target.checked
 			})
 		}
-		if (e.target.type === 'number' || e.target.type === 'text' || e.target.type === 'textarea') {
+		if (e.target.type === 'number' || e.target.type === 'text' || e.target.type === 'textarea') {// i managed normal text and number values
 			console.log(e.target.type)
 			setFormdata({
 				...formdata,
@@ -104,8 +104,9 @@ const CreateListing = () => {
 	}
 	const handleSubmit = async (e) => {
 		e.preventDefault()
-		if(formdata.imageUrls.length < 1) return setError("you must have to upload atleast one image")
-			if(+formdata.regularPrice < +formdata.discountPrice) return setError("discount price mus be less than regular price")
+		if (formdata.imageUrls.length < 1) return setError("you must have to upload atleast one image")
+		//i used + because it sometimes had string type for number so it convert string to number 
+		if (+formdata.regularPrice < +formdata.discountPrice) return setError("discount price mus be less than regular price")
 		try {
 			setLoading(true)
 			setError(false)
@@ -116,15 +117,16 @@ const CreateListing = () => {
 				},
 				body: JSON.stringify({
 					...formdata,
-					userRef:currentUser._id
+					userRef: currentUser._id
 				})
 			})
 			const data = await res.json()
 			setLoading(false)
-			if(data.success === false){
+			if (data.success === false) {
 				setError(data.message)
 				setLoading(false)
 			}
+			console.log(data);
 			navigate(`/listing/${data._id}`)
 		} catch (err) {
 			console.log(err);
@@ -183,21 +185,21 @@ const CreateListing = () => {
 								rounded-lg border border-gray-400' min='1' max='100000000' id='regularPrice' />
 							<div className='flex flex-col '>
 								<span>Regular Price</span>
-								{formdata.type==='rent' && <p className='text-xs'>(₹/month)</p> }
-								
+								{formdata.type === 'rent' && <p className='text-xs'>(₹/month)</p>}
+
 							</div>
 						</div>
 						{formdata.offer && (
 							<div className='flex gap-3 items-center '>
-							<input onChange={handleChange} value={formdata.discountPrice} type="number" required className='bg-gray-300 p-3 
+								<input onChange={handleChange} value={formdata.discountPrice} type="number" required className='bg-gray-300 p-3 
 								rounded-lg border border-gray-400' min='1' max='100000000' id='discountPrice' />
-							<div className='flex flex-col '>
-								<span>Discounted Price</span>
-								{formdata.type==='rent' && <p className='text-xs'>(₹/month)</p> }
+								<div className='flex flex-col '>
+									<span>Discounted Price</span>
+									{formdata.type === 'rent' && <p className='text-xs'>(₹/month)</p>}
+								</div>
 							</div>
-						</div>
 						)}
-						
+
 
 
 
@@ -222,7 +224,7 @@ const CreateListing = () => {
 							hover:opacity-75'>Delete</button>
 						</div>
 					))}
-					<button disabled={loading || uploading} className='bg-green-700 text-center p-3 rounded-lg uppercase text-white hover:opacity-95 disabled:opacity-75'>{loading ? 'creating' :'create listing'}</button>
+					<button disabled={loading || uploading} className='bg-green-700 text-center p-3 rounded-lg uppercase text-white hover:opacity-95 disabled:opacity-75'>{loading ? 'creating' : 'create listing'}</button>
 					{error && <p className='text-red-700'>{error}</p>}
 				</div>
 
