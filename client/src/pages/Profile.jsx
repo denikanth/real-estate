@@ -19,6 +19,7 @@ const Profile = () => {
   const [visible, setVisible] = useState(false)
   const [listingsError, setListingsError] = useState(null)
   const dispatch = useDispatch()
+
   useEffect(() => {
     if (file) {
       handleFileUpload(file)
@@ -146,7 +147,28 @@ const Profile = () => {
       setListingsError("Error showing Listing!!")
     }
   }
-  console.log(visible);
+  const handleDeleteListing=async(id)=>{
+
+    try {
+      
+      const res=await fetch(`api/listing/delete/${id}`,{
+        method:'DELETE', 
+       
+      })
+
+      const data=await res.json()
+      if(data.sucess === false){
+        console.log(data.message)
+        return 
+      }
+      setListings(
+        listings.filter((listing)=>listing._id !== id)
+      )
+      
+    } catch (err) {
+      console.log(err);
+    }
+  }
   return (
 
     <div className='flex items-center justify-center flex-col
@@ -196,19 +218,22 @@ const Profile = () => {
       {listings && listings.length > 0 && listings.map((listing, index) =>
       (visible &&
 
-        (<Link to={`/listing/${listing._id}`} key={index}>
-          <div  className='w-[300px] sm:w-[480px] p-3 shadow-md border border-gray-300
+        (
+          <div key={index} className=' w-[300px] sm:w-[480px] p-3 shadow-md border border-gray-300
        flex justify-between items-center '>
+            <Link to={`/listing/${listing._id}`} key={index}>
             <div className='flex gap-2 items-center'>
               <img src={listing.imageUrls[0]} className='w-20 h-20 rounded object-contain' alt="" />
               <span className='hover:underline truncate cursor-pointer font-semibold'>{listing.name}</span>
             </div>
+            </Link>
             <div className='flex flex-col gap-2 items-center' >
-              <span className='text-red-700 cursor-pointer'>Delete</span>
+              <span onClick={()=>{handleDeleteListing(listing._id)}} 
+              className='text-red-700 cursor-pointer '>Delete</span>
               <span className='text-green-700 cursor-pointer'>Edit</span>
             </div>
           </div>
-        </Link>
+        
         )
 
       ))}
