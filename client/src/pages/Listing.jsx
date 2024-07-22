@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore from 'swiper'
 import { Navigation } from 'swiper/modules'
 import 'swiper/css/bundle'
-import { FaMapMarkerAlt, FaBed, FaParking, FaChair, FaBath } from 'react-icons/fa'
+import { FaMapMarkerAlt, FaBed, FaParking, FaChair, FaBath, FaShare } from 'react-icons/fa'
+import Contact from '../components/Contact'
 const Listing = () => {
 	SwiperCore.use([Navigation])
+
+	const location = useLocation()
+	const domain = window.location.hostname;
 	const [listing, setListing] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
+	const [copied, setCopied] = useState(false)
 	const { listingId } = useParams()
-
+	const [contact, setContact] = useState(false)
+	const { currentUser } = useSelector((state) => state.user)
 	useEffect(() => {
 
 		const fetchListing = async () => {
@@ -40,10 +47,20 @@ const Listing = () => {
 		}
 		fetchListing()
 	}, [listingId])
+	const handleCopyToClipboard = () => {
+		navigator.clipboard.writeText(`${domain}${location.pathname}`).then(() => {
+			
+			setCopied(true)
+			setTimeout(()=>{setCopied(false)},3000)
+		}).catch(err => {
+			setCopied(false)
+		});
+	};
 
-	console.log()
+	
 	return (
 		<main>
+
 			{loading && <p className='my-7 text-xl text-center'>Loading...</p>}
 			{error && <p className='my-7 text-xl text-center'>Something went wrong...</p>}
 			{listing && !loading && !error && (
@@ -74,9 +91,9 @@ const Listing = () => {
 								{
 									listing?.offer && <button className='max-w-[220px] flex-1  font-semibold text-white bg-green-900 p-1 rounded-lg'>{`₹${listing?.discountPrice.toLocaleString()} discount`}</button>
 								}
-								
+
 							</div>
-							
+
 							<p>
 								<span className='font-semibold'>Description: </span>
 								{listing.description}
@@ -107,10 +124,22 @@ const Listing = () => {
 									</div>
 								}
 							</div>
-							<button className='bg-violet-700 rounded-lg mt-6
+							{currentUser._id && listing.userRef !== currentUser._id && !contact &&
+								<button onClick={() => setContact(true)} className='bg-violet-700 rounded-lg mt-6
                              text-slate-100 hover:opacity-90 text-lg p-2'>Contact Landlord</button>
+							}
+							{contact && <Contact listing={listing} />}
 						</div>
 					</div>
+					<div onClick={handleCopyToClipboard} className='fixed top-[90px] right-10 z-50 rounded-full bg-slate-200 p-4'>
+						<FaShare className='text-slate-500' />
+					</div>
+					{
+						copied &&
+						<div className='fixed top-[150px] right-16 z-50 rounded-lg bg-slate-200 p-2'>
+							Text copied
+						</div>
+					}
 
 				</div>)
 			}

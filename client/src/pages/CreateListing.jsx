@@ -3,7 +3,9 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../firebase'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+
 const CreateListing = () => {
+	
 	const navigate = useNavigate()
 	const { currentUser } = useSelector((state) => state.user)
 	const [files, setFiles] = useState([])
