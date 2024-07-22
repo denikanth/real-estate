@@ -1,0 +1,122 @@
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import SwiperCore from 'swiper'
+import { Navigation } from 'swiper/modules'
+import 'swiper/css/bundle'
+import { FaMapMarkerAlt, FaBed, FaParking, FaChair, FaBath } from 'react-icons/fa'
+const Listing = () => {
+	SwiperCore.use([Navigation])
+	const [listing, setListing] = useState(null)
+	const [loading, setLoading] = useState(false)
+	const [error, setError] = useState(false)
+	const { listingId } = useParams()
+
+	useEffect(() => {
+
+		const fetchListing = async () => {
+
+			try {
+
+				setLoading(true)
+				setError(false)
+				const res = await fetch(`/api/listing/get-listing/${listingId}`)
+				const data = await res.json()
+
+				if (data.success === false) {
+					setError(true)
+					setLoading(false)
+					return
+
+				}
+
+				setListing(data)
+				setLoading(false)
+
+			} catch (err) {
+				setError(true)
+				setLoading(false)
+			}
+		}
+		fetchListing()
+	}, [listingId])
+
+	console.log()
+	return (
+		<main>
+			{loading && <p className='my-7 text-xl text-center'>Loading...</p>}
+			{error && <p className='my-7 text-xl text-center'>Something went wrong...</p>}
+			{listing && !loading && !error && (
+				< div >
+					<Swiper navigation>
+						{listing.imageUrls.map((url, index) => (
+							<SwiperSlide key={index}>
+								<div className='h-[75vh] '
+									style={{ background: `url(${url}) no-repeat  center `, backgroundSize: '100vw 100vh' }}>
+
+								</div>
+
+							</SwiperSlide>
+
+						))}
+					</Swiper>
+					<div className='max-w-4xl mx-auto p-2 '>
+						<h1 className='text-3xl font-semibold my-7 mx-auto'>{listing.name} - ₹ {listing.type === "sale" ?
+							listing?.regularPrice.toLocaleString() : `${listing?.regularPrice.toLocaleString()}/month`}</h1>
+
+						<div className='flex flex-col flex-wrap gap-2 '>
+							<p className='flex gap-2 items-center font-medium text-slate-600'>
+								<FaMapMarkerAlt className='text-green-600' />
+								{listing.address}
+							</p>
+							<div className='flex gap-4 max-w-[440px]   h-9 '>
+								<button className=' max-w-[220px] flex-1 text-white bg-red-900 p-1 rounded-lg'>{listing.type === "sale" ? "For Sale" : "For Rent"}</button>
+								{
+									listing?.offer && <button className='max-w-[220px] flex-1  font-semibold text-white bg-green-900 p-1 rounded-lg'>{`₹${listing?.discountPrice.toLocaleString()} discount`}</button>
+								}
+								
+							</div>
+							
+							<p>
+								<span className='font-semibold'>Description: </span>
+								{listing.description}
+							</p>
+							<div className='flex gap-4  flex-wrap'>
+								<div className='flex gap-2 items-center '>
+									<FaBed className='text-green-800 w-5 h-5' />
+									<p className='text-sm text-green-800 font-semibold'>{listing.bedrooms} Beds</p>
+
+								</div>
+								<div className='flex gap-2 items-center  '>
+									<FaBath className='text-green-800 w-5 h-5' />
+									<p className='text-sm text-green-800 font-semibold'>{listing.bathrooms} Baths</p>
+
+								</div>
+								{
+									listing.parking && <div className='flex gap-2 items-center   '>
+										<FaParking className='text-green-800 w-5 h-5' />
+										<p className='text-sm text-green-800 font-semibold'>Parking Spot</p>
+
+									</div>
+								}
+								{
+									listing.furnished && <div className='flex gap-2 items-center   '>
+										<FaChair className='text-green-800 w-5 h-5' />
+										<p className='text-sm text-green-800 font-semibold'>Furnished</p>
+
+									</div>
+								}
+							</div>
+							<button className='bg-violet-700 rounded-lg mt-6
+                             text-slate-100 hover:opacity-90 text-lg p-2'>Contact Landlord</button>
+						</div>
+					</div>
+
+				</div>)
+			}
+
+		</main >
+	)
+}
+
+export default Listing
