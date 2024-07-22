@@ -24,11 +24,10 @@ export const updateUser = async (req, res, next) => {
                 avatar:req.body.avatar,
             }//set operator just used to define the update value in it
         },{new:true})//{new:true} is responsible for update this updated document in mongoDb database collectins
-        console.log(req.body.password)
-        console.log(req.params.id)
+       
         const {password,...rest}=updatedUser._doc
         res.status(200).json(rest)
-        console.log(rest)
+        
     } catch (err) {
         next(err)
     }

@@ -10,7 +10,7 @@ export const verfiyToken=(req,res,next)=>{
         jwt.verify(token,process.env.JWT_SCRETE,(err,user)=>{
             if(err) return next(errorHandler(403,'forbidden or token is not valid'))
             req.user=user
-        console.log(req.user)
+        
             next()
         })
         

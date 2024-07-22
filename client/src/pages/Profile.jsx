@@ -230,7 +230,10 @@ const Profile = () => {
             <div className='flex flex-col gap-2 items-center' >
               <span onClick={()=>{handleDeleteListing(listing._id)}} 
               className='text-red-700 cursor-pointer '>Delete</span>
+              <Link to={`/update-listing/${listing._id}`}>
               <span className='text-green-700 cursor-pointer'>Edit</span>
+              </Link>
+              
             </div>
           </div>
         

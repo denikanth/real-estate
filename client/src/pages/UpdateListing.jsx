@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+
+import React, { useEffect, useState } from 'react'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { app } from '../firebase'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-const CreateListing = () => {
-	const navigate = useNavigate()
+import { useNavigate ,useParams} from 'react-router-dom'
+const UpdateListing = () => {
+    const navigate = useNavigate()
+    const {id}=useParams()
 	const { currentUser } = useSelector((state) => state.user)
 	const [files, setFiles] = useState([])
 	const [formdata, setFormdata] = useState({
@@ -25,8 +27,20 @@ const CreateListing = () => {
 	const [uploading, setUploading] = useState(false)
 	const [error, setError] = useState(false)
 	const [loading, setLoading] = useState(false)
-	
-	const handleDelete = (index) => {
+
+    useEffect(()=>{
+        fetchData()
+    },[])
+    const fetchData=async()=>{
+        const res=await fetch(`/api/listing/get-listing/${id}`)
+		const data=await res.json()
+		if(data.success=== false){
+			console.log(console.log(data.message));
+			return
+		}
+		setFormdata(data)
+    }
+    const handleDelete = (index) => {
 		setFormdata({
 			...formdata,
 			imageUrls: formdata.imageUrls.filter((_, i) => i !== index)
@@ -81,7 +95,7 @@ const CreateListing = () => {
 
 	}
 	const handleChange = (e) => {//here i managed to get differnt type of inputs and store in state variable
-		console.log(e.target.type)
+		
 		if (e.target.id === 'sale' || e.target.id === 'rent') {//checkbox input but i only had type property in state variable
 			setFormdata({
 				...formdata,
@@ -110,15 +124,12 @@ const CreateListing = () => {
 		try {
 			setLoading(true)
 			setError(false)
-			const res = await fetch('api/listing/create', {
+			const res = await fetch(`/api/listing/update/${id}`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({
-					...formdata,
-					userRef: currentUser._id
-				})
+				body: JSON.stringify(formdata)
 			})
 			const data = await res.json()
 			setLoading(false)
@@ -133,9 +144,10 @@ const CreateListing = () => {
 			setError(true)
 		}
 	}
-	return (
+	console.log(id);
+    return (
 		<main className='p-3 max-w-4xl mx-auto '>
-			<h1 className='text-center text-3xl font-bold my-8'>Create Listing</h1>
+			<h1 className='text-center text-3xl font-bold my-8'>Edit Listing</h1>
 			<form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-3  '>
 
 				<div className='flex flex-col gap-4 flex-1'>
@@ -211,7 +223,7 @@ const CreateListing = () => {
 						<span className='text-gray-600'>The first image will be the cover image (max 6)</span>
 					</div>
 					<div className='flex gap-2'>
-						<input onChange={(e) => setFiles(e.target.files)} id='images' type="file" className='p-3 border w-full border-gray-400 rounded' accept='image/*' required multiple />
+						<input onChange={(e) => setFiles(e.target.files)} id='images' type="file" className='p-3 border w-full border-gray-400 rounded' accept='image/*'  multiple />
 						<button disabled={uploading} onClick={handleImageSubmit} type='button' className='bg-white border border-green-500 px-4 py-4 rounded uppercase text-green-500 
 						cursor-pointer hover:shadow-xl disabled:opacity-75'   >{uploading ? "uploading..." : "Upload"}</button>
 					</div>
@@ -224,7 +236,7 @@ const CreateListing = () => {
 							hover:opacity-75'>Delete</button>
 						</div>
 					))}
-					<button disabled={loading || uploading} className='bg-green-700 text-center p-3 rounded-lg uppercase text-white hover:opacity-95 disabled:opacity-75'>{loading ? 'creating' : 'create listing'}</button>
+					<button disabled={loading || uploading} className='bg-green-700 text-center p-3 rounded-lg uppercase text-white hover:opacity-95 disabled:opacity-75'>{loading ? 'Updating' : 'Edit listing'}</button>
 					{error && <p className='text-red-700'>{error}</p>}
 				</div>
 
@@ -233,4 +245,4 @@ const CreateListing = () => {
 	)
 }
 
-export default CreateListing
+export default UpdateListing
