@@ -35,7 +35,7 @@ export const updateListing = async (req, res, next) => {
     }
 
     const listing = await Listing.findById(req.params.id)
-    
+
     if (!listing) return next(errorHandler(404, "Listing not found"))
     if (req.user.id !== listing.userRef) return next(errorHandler(401, "You can only update your account"))
 
@@ -67,4 +67,46 @@ export const getListing = async (req, res, next) => {
         next(err)
     }
 
+}
+export const getListings = async (req, res, next) => {
+
+    try {
+        const limit = parseInt(req.query.limit) || 9
+        const startIndex = parseInt(req.query.startIndex) || 0
+        const searchTerm = req.query.searchTerm || ''
+        const sort = req.query.sort || 'createdAt'
+        const order = req.query.order || 'desc'
+        let offer = req.query.offer
+        if (offer === undefined || offer === 'false') {
+            offer = { $in: [false, true] }//this $in operator is used to match whether offer value in in the array[false,true]
+            //so in the database it will take both offer:true and offer:false documents
+        }
+        let parking = req.query.parking
+        if (parking === undefined || parking === 'false') {
+            parking = { $in: [false, true] }
+        }
+        let furnished = req.query.furnished
+        if (furnished === undefined || furnished === 'false') {
+            furnished = { $in: [false, true] }
+        }
+        let type = req.query.type
+        if (type === undefined || furnished === 'all') {
+            type = { $in: ['sale', 'rent'] }
+        }
+        //$regex operator do if my input eg:de but the database contain name:deni eventhough it is not fully match the regex will take the doument if my input is presnet in the name field value
+        //$options:'i' just dont care about case sensitive it return the document eventhough it is case sesitive
+        const listings = await Listing.find({
+            name: { $regex: searchTerm, $options: 'i' },
+            offer,
+            parking,
+            furnished,
+            type,
+        }).sort(
+            { [sort]: order }
+        ).limit(limit).skip(startIndex)
+        //skip() is used to ignore specifed number of documents in this case it is 0 means it wont skip any documents
+        res.status(200).json(listings)
+    } catch (err) {
+        next(err)
+    }
 }

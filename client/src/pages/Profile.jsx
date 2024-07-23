@@ -184,7 +184,10 @@ const Profile = () => {
             filePercent > 0 && filePercent < 100 ? <span className='text-green-700'>{`uploading ${filePercent}%`}</span>
               : filePercent === 100 ? <span className='text-green-600'>Image Successfuly uploaded</span>
                 : ""
-        }
+        
+      }
+      
+      
       </p>
       <p className='text-green-600'>{UpdateComplete ? 'Updated Successfully' : ''}</p>
       {error && <p className='text-red-600 '>{error}</p>}

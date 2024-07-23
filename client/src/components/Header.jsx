@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const Header = () => {
 	const {currentUser}=useSelector((state)=>state.user)
 	return (
-		<header className='bg-[#8697c4] shadow-md '>
+		<header className='bg-[#8697c4] shadow-lg '>
 			<div className='flex justify-between items-center max-w-6xl p-3 mx-auto '>
 				<Link to='/'>
 					<h1 className='font-bold text-sm sm:text-xl flex flex-wrap'>

@@ -49,15 +49,15 @@ const Listing = () => {
 	}, [listingId])
 	const handleCopyToClipboard = () => {
 		navigator.clipboard.writeText(`${domain}${location.pathname}`).then(() => {
-			
+
 			setCopied(true)
-			setTimeout(()=>{setCopied(false)},3000)
-		}).catch(err => {
+			setTimeout(() => { setCopied(false) }, 3000)
+		}).catch((err) => {
 			setCopied(false)
 		});
 	};
 
-	
+
 	return (
 		<main>
 
@@ -68,7 +68,7 @@ const Listing = () => {
 					<Swiper navigation>
 						{listing.imageUrls.map((url, index) => (
 							<SwiperSlide key={index}>
-								<div className='h-[75vh] '
+								<div className='h-[75vh]  '
 									style={{ background: `url(${url}) no-repeat  center `, backgroundSize: '100vw 100vh' }}>
 
 								</div>
@@ -109,20 +109,21 @@ const Listing = () => {
 									<p className='text-sm text-green-800 font-semibold'>{listing.bathrooms} Baths</p>
 
 								</div>
-								{
-									listing.parking && <div className='flex gap-2 items-center   '>
-										<FaParking className='text-green-800 w-5 h-5' />
-										<p className='text-sm text-green-800 font-semibold'>Parking Spot</p>
 
-									</div>
-								}
-								{
-									listing.furnished && <div className='flex gap-2 items-center   '>
-										<FaChair className='text-green-800 w-5 h-5' />
-										<p className='text-sm text-green-800 font-semibold'>Furnished</p>
+								<div className='flex gap-2 items-center   '>
+									<FaParking className='text-green-800 w-5 h-5' />
+									<p className='text-sm text-green-800 font-semibold'>{listing.parking ? 'Parking Spot' :
+										'No Parking'}</p>
 
-									</div>
-								}
+								</div>
+
+								<div className='flex gap-2 items-center   '>
+									<FaChair className='text-green-800 w-5 h-5' />
+									<p className='text-sm text-green-800 font-semibold'>{listing.furnished ? 'Furnished' :
+										'Not Furnished'}</p>
+
+								</div>
+
 							</div>
 							{currentUser._id && listing.userRef !== currentUser._id && !contact &&
 								<button onClick={() => setContact(true)} className='bg-violet-700 rounded-lg mt-6
@@ -131,13 +132,13 @@ const Listing = () => {
 							{contact && <Contact listing={listing} />}
 						</div>
 					</div>
-					<div onClick={handleCopyToClipboard} className='fixed top-[90px] right-10 z-50 rounded-full bg-slate-200 p-4'>
+					<div onClick={handleCopyToClipboard} className='cursor-pointer  fixed top-[90px] right-10 z-50 rounded-full bg-slate-200 p-4'>
 						<FaShare className='text-slate-500' />
 					</div>
 					{
 						copied &&
-						<div className='fixed top-[150px] right-16 z-50 rounded-lg bg-slate-200 p-2'>
-							Text copied
+						<div className=' fixed top-[150px] right-16 z-50 rounded-lg bg-slate-200 p-2'>
+							Link copied!
 						</div>
 					}
 
