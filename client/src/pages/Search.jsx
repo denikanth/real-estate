@@ -16,6 +16,7 @@ const Search = () => {
 	const [listings, setListings] = useState([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
+	const [showmore, setShowmore] = useState(false)
 	const handleChange = (e) => {
 
 		if (e.target.id === 'all' || e.target.id === 'rent' || e.target.id === 'sale') {
@@ -92,6 +93,7 @@ const Search = () => {
 				setError(false)
 				setLoading(true)
 				setListings([])
+				setShowmore(false)
 				const searchQuery = urlParams.toString()
 				const res = await fetch(`/api/listing/get?${searchQuery}`)
 				const data = await res.json()
@@ -100,6 +102,9 @@ const Search = () => {
 					setError(true)
 					console.log('in if');
 					return
+				}
+				if (data.length > 8) {
+					setShowmore(true)
 				}
 				setListings(data)
 				setLoading(false)
@@ -112,6 +117,25 @@ const Search = () => {
 		}
 		fetchListings()
 	}, [location.search])
+	const handleShowMore = async () => {
+
+		const urlParams = new URLSearchParams(location.search)
+		const noOfListings = listings.length
+		const startIndex = noOfListings
+		urlParams.set('startIndex', startIndex)
+		const searchQuery = urlParams.toString()
+		const res = await fetch(`/api/listing/get?${searchQuery}`)
+		const data = await res.json()
+
+		if (data.length < 9) {
+
+			setShowmore(false)
+			setListings([
+				...listings, ...data
+			])
+		}
+	}
+
 	console.log(listings);
 	console.log(error);
 	return (
@@ -184,14 +208,14 @@ const Search = () => {
 
 										<span className='text-xs font-semibold'>{listing.bathrooms} Baths</span>
 									</div>
+
 								</div>
+
 							</Link>
 						))
 					}
-
-
-
-
+					{showmore && <span
+						onClick={handleShowMore} className='text-green-600 font-semibold hover:underline text-center w-full cursor-pointer'>Show More</span>}
 				</div>
 
 			</div>
