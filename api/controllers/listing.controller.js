@@ -71,6 +71,7 @@ export const getListing = async (req, res, next) => {
 export const getListings = async (req, res, next) => {
 
     try {
+        
         const limit = parseInt(req.query.limit) || 9
         const startIndex = parseInt(req.query.startIndex) || 0
         const searchTerm = req.query.searchTerm || ''
@@ -90,7 +91,7 @@ export const getListings = async (req, res, next) => {
             furnished = { $in: [false, true] }
         }
         let type = req.query.type
-        if (type === undefined || furnished === 'all') {
+        if (type === undefined || type === 'all') {
             type = { $in: ['sale', 'rent'] }
         }
         //$regex operator do if my input eg:de but the database contain name:deni eventhough it is not fully match the regex will take the doument if my input is presnet in the name field value
@@ -106,6 +107,7 @@ export const getListings = async (req, res, next) => {
         ).limit(limit).skip(startIndex)
         //skip() is used to ignore specifed number of documents in this case it is 0 means it wont skip any documents
         res.status(200).json(listings)
+        console.log(listings);
     } catch (err) {
         next(err)
     }
