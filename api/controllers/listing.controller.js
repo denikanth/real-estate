@@ -107,7 +107,7 @@ export const getListings = async (req, res, next) => {
         ).limit(limit).skip(startIndex)
         //skip() is used to ignore specifed number of documents in this case it is 0 means it wont skip any documents
         res.status(200).json(listings)
-        console.log(listings);
+        
     } catch (err) {
         next(err)
     }

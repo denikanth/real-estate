@@ -106,7 +106,8 @@ const Home = () => {
                   <span className='text-gray-600 text-[12px] flex gap-1 items-center'>
                     <FaMapMarkerAlt className='text-green-600' /> {listing.address}</span>
                   <span className='text-gray-600  text-[12px] flex overflow-clip max-h-[35px]'>{listing.description}</span>
-                  <span className='text-slate-500 font-semibold'>₹{listing?.discountPrice.toLocaleString()}/month</span> 
+                  
+										<span className='text-slate-500 font-semibold'>₹{listing?.regularPrice.toLocaleString()}</span>
                     
                   <div className='flex gap-4 items-center '>
 
@@ -138,8 +139,8 @@ const Home = () => {
                   <span className='text-gray-600 text-[12px] flex gap-1 items-center'>
                     <FaMapMarkerAlt className='text-green-600' /> {listing.address}</span>
                   <span className='text-gray-600  text-[12px] flex overflow-clip max-h-[35px]'>{listing.description}</span>
-                  {listing.offer ? <span className='text-slate-500 font-semibold'>₹{listing?.discountPrice.toLocaleString()}/month</span> :
-										<span className='text-slate-500 font-semibold'>₹{listing?.regularPrice.toLocaleString()}</span>}
+                  
+										<span className='text-slate-500 font-semibold'>₹{listing?.regularPrice.toLocaleString()}/month</span>
                     
                   <div className='flex gap-4 items-center '>
 
@@ -171,8 +172,8 @@ const Home = () => {
                   <span className='text-gray-600 text-[12px] flex gap-1 items-center'>
                     <FaMapMarkerAlt className='text-green-600' /> {listing.address}</span>
                   <span className='text-gray-600  text-[12px] flex overflow-clip max-h-[35px]'>{listing.description}</span>
-                  {listing.offer ? <span className='text-slate-500 font-semibold'>₹{listing?.discountPrice.toLocaleString()}/month</span> :
-										<span className='text-slate-500 font-semibold'>₹{listing?.regularPrice.toLocaleString()}</span>}
+                  
+										<span className='text-slate-500 font-semibold'>₹{listing?.regularPrice.toLocaleString()}</span>
                     
                   <div className='flex gap-4 items-center '>
 
