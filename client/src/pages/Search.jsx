@@ -130,10 +130,11 @@ const Search = () => {
 		if (data.length < 9) {
 
 			setShowmore(false)
-			setListings([
-				...listings, ...data
-			])
+			
 		}
+		setListings([
+			...listings, ...data
+		])
 	}
 
 	console.log(listings);
